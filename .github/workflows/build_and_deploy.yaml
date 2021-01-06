@@ -5,15 +5,18 @@ name: Build and deploy Django app to Azure App Service
 
 on:
   push:
+    paths-ignore:
+      - '.github/**'
     branches: 
       - master
 
 env:
-  WEBAPP_NAME: 'freeberg-django'  # Replace with the name of your Azure web app
+  WEBAPP_NAME: 'python-django-demo'  # Replace with the name of your Azure web app
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    environment: Production
     
     steps:
     - uses: actions/checkout@v2
@@ -21,7 +24,7 @@ jobs:
     - name: Setup Python version
       uses: actions/setup-python@v2
       with:
-        python-version: 3.8
+        python-version: 3.9
 
     - name: Create and start virtual environment
       run: |
@@ -48,6 +51,7 @@ jobs:
   deploy-to-webapp:
     needs: build-and-test
     runs-on: ubuntu-latest
+    environment: Production
 
     steps:
       - uses: actions/download-artifact@v2
@@ -64,7 +68,7 @@ jobs:
         uses: Azure/appservice-settings@v1
         with:  
           app-name: ${{ env.WEBAPP_NAME }}
-          app-settings-json: '[{ "name": "DISABLE_COLLECTSTATIC", "value": "true" }, { "name": "POST_BUILD_COMMAND",  "value": "python manage.py makemigrations && python manage.py migrate" }, { "name": "SCM_DO_BUILD_DURING_DEPLOYMENT", "value": "true" }, { "name": "DJANGO_ENV", "value": "production"}]'
+          app-settings-json: '[{ "name": "DISABLE_COLLECTSTATIC", "value": "true" }, { "name": "POST_BUILD_COMMAND",  "value": "python manage.py makemigrations && python manage.py migrate" }, { "name": "SCM_DO_BUILD_DURING_DEPLOYMENT", "value": "true" }]'
 
       - name: Deploy to App Service
         uses: azure/webapps-deploy@v2
