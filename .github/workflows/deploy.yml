@@ -20,6 +20,8 @@ on:
 
 env:
   WEBAPP_NAME: 'python-django-demo'  # Replace with the name of your Azure web app
+  PYTHON_VERSION: 3.9
+  AZURE_WEBAPP_PACKAGE_PATH: '.'
 
 jobs:
   build-and-test:
@@ -82,4 +84,5 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.WEBAPP_NAME}}
+          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
 
