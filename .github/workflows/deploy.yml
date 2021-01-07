@@ -5,8 +5,9 @@ name: Build and deploy Django app to Azure App Service
 
 on:
   push:
-    paths-ignore:
-      - '.github/**'
+    paths:
+      - '**.py'
+      - '**.html'
     branches: 
       - master
   workflow_dispatch:
