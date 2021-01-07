@@ -2,17 +2,26 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "sites_python_django_demo_name": {
+        "web_app_name": {
             "defaultValue": "python-django-demo",
-            "type": "String"
+            "type": "String",
+            "metadata": {
+                "description": "The name of the web application, which will be used to create its domain name"
+            }
         },
-        "vaults_python_django_demo_name": {
+        "key_vault_name": {
             "defaultValue": "python-django-demo",
-            "type": "String"
+            "type": "String",
+            "metadata": {
+                "description": "The name of the Key Vault"
+            }
         },
-        "serverfarms_python_django_demo_name": {
+        "web_plan_name": {
             "defaultValue": "python-django-demo",
-            "type": "String"
+            "type": "String",
+            "metadata": {
+                "description": "The name of the App Service Plan used to host the web application"
+            }
         }
     },
     "variables": {},
@@ -20,7 +29,7 @@
         {
             "type": "Microsoft.KeyVault/vaults",
             "apiVersion": "2016-10-01",
-            "name": "[parameters('vaults_python_django_demo_name')]",
+            "name": "[parameters('key_vault_name')]",
             "location": "eastus2",
             "tags": {
                 "usage": "demo"
@@ -41,7 +50,7 @@
         {
             "type": "Microsoft.Web/serverfarms",
             "apiVersion": "2018-02-01",
-            "name": "[parameters('serverfarms_python_django_demo_name')]",
+            "name": "[parameters('web_plan_name')]",
             "location": "East US 2",
             "tags": {
                 "usage": "demo"
@@ -68,10 +77,10 @@
         {
             "type": "Microsoft.KeyVault/vaults/secrets",
             "apiVersion": "2016-10-01",
-            "name": "[concat(parameters('vaults_python_django_demo_name'), '/DATABASE-ADMIN-PASSWORD')]",
+            "name": "[concat(parameters('key_vault_name'), '/DATABASE-ADMIN-PASSWORD')]",
             "location": "eastus2",
             "dependsOn": [
-                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaults_python_django_demo_name'))]"
+                "[resourceId('Microsoft.KeyVault/vaults', parameters('key_vault_name'))]"
             ],
             "properties": {
                 "attributes": {
@@ -82,10 +91,10 @@
         {
             "type": "Microsoft.Web/sites",
             "apiVersion": "2018-11-01",
-            "name": "[parameters('sites_python_django_demo_name')]",
+            "name": "[parameters('web_app_name')]",
             "location": "East US 2",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_python_django_demo_name'))]"
+                "[resourceId('Microsoft.Web/serverfarms', parameters('web_plan_name'))]"
             ],
             "tags": {
                 "usage": "demo"
@@ -95,17 +104,17 @@
                 "enabled": true,
                 "hostNameSslStates": [
                     {
-                        "name": "[concat(parameters('sites_python_django_demo_name'), '.azurewebsites.net')]",
+                        "name": "[concat(parameters('web_app_name'), '.azurewebsites.net')]",
                         "sslState": "Disabled",
                         "hostType": "Standard"
                     },
                     {
-                        "name": "[concat(parameters('sites_python_django_demo_name'), '.scm.azurewebsites.net')]",
+                        "name": "[concat(parameters('web_app_name'), '.scm.azurewebsites.net')]",
                         "sslState": "Disabled",
                         "hostType": "Repository"
                     }
                 ],
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_python_django_demo_name'))]",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('web_plan_name'))]",
                 "reserved": true,
                 "isXenon": false,
                 "hyperV": false,
@@ -123,10 +132,10 @@
         {
             "type": "Microsoft.Web/sites/config",
             "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_python_django_demo_name'), '/web')]",
+            "name": "[concat(parameters('web_app_name'), '/web')]",
             "location": "East US 2",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_python_django_demo_name'))]"
+                "[resourceId('Microsoft.Web/sites', parameters('web_app_name'))]"
             ],
             "tags": {
                 "usage": "demo"
@@ -199,10 +208,10 @@
         {
             "type": "Microsoft.Web/sites/deployments",
             "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_python_django_demo_name'), '/09218ee51c400cbbeb74d705a8f95f4fb78307351609958166112')]",
+            "name": "[concat(parameters('web_app_name'), '/09218ee51c400cbbeb74d705a8f95f4fb78307351609958166112')]",
             "location": "East US 2",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_python_django_demo_name'))]"
+                "[resourceId('Microsoft.Web/sites', parameters('web_app_name'))]"
             ],
             "properties": {
                 "status": 4,
@@ -217,10 +226,10 @@
         {
             "type": "Microsoft.Web/sites/deployments",
             "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_python_django_demo_name'), '/4d1454a4b845457ab620709463d35145')]",
+            "name": "[concat(parameters('web_app_name'), '/4d1454a4b845457ab620709463d35145')]",
             "location": "East US 2",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_python_django_demo_name'))]"
+                "[resourceId('Microsoft.Web/sites', parameters('web_app_name'))]"
             ],
             "properties": {
                 "status": 4,
@@ -236,10 +245,10 @@
         {
             "type": "Microsoft.Web/sites/deployments",
             "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_python_django_demo_name'), '/51ce5e1bec7857ab555551023f99257fb1b901571609959320781')]",
+            "name": "[concat(parameters('web_app_name'), '/51ce5e1bec7857ab555551023f99257fb1b901571609959320781')]",
             "location": "East US 2",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_python_django_demo_name'))]"
+                "[resourceId('Microsoft.Web/sites', parameters('web_app_name'))]"
             ],
             "properties": {
                 "status": 4,
@@ -254,10 +263,10 @@
         {
             "type": "Microsoft.Web/sites/deployments",
             "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_python_django_demo_name'), '/600df79bf61547cf81ac4bb66d0f7977')]",
+            "name": "[concat(parameters('web_app_name'), '/600df79bf61547cf81ac4bb66d0f7977')]",
             "location": "East US 2",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_python_django_demo_name'))]"
+                "[resourceId('Microsoft.Web/sites', parameters('web_app_name'))]"
             ],
             "properties": {
                 "status": 4,
@@ -273,10 +282,10 @@
         {
             "type": "Microsoft.Web/sites/deployments",
             "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_python_django_demo_name'), '/8d84578f25b11f9e5d8ac1125356d9a8e9914b421609956815783')]",
+            "name": "[concat(parameters('web_app_name'), '/8d84578f25b11f9e5d8ac1125356d9a8e9914b421609956815783')]",
             "location": "East US 2",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_python_django_demo_name'))]"
+                "[resourceId('Microsoft.Web/sites', parameters('web_app_name'))]"
             ],
             "properties": {
                 "status": 4,
@@ -291,10 +300,10 @@
         {
             "type": "Microsoft.Web/sites/deployments",
             "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_python_django_demo_name'), '/c75bf178a99e44d19450e47b2ad180a2')]",
+            "name": "[concat(parameters('web_app_name'), '/c75bf178a99e44d19450e47b2ad180a2')]",
             "location": "East US 2",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_python_django_demo_name'))]"
+                "[resourceId('Microsoft.Web/sites', parameters('web_app_name'))]"
             ],
             "properties": {
                 "status": 4,
@@ -310,10 +319,10 @@
         {
             "type": "Microsoft.Web/sites/deployments",
             "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_python_django_demo_name'), '/f77d904961d34138b5428c179fa60903')]",
+            "name": "[concat(parameters('web_app_name'), '/f77d904961d34138b5428c179fa60903')]",
             "location": "East US 2",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_python_django_demo_name'))]"
+                "[resourceId('Microsoft.Web/sites', parameters('web_app_name'))]"
             ],
             "properties": {
                 "status": 4,
@@ -329,10 +338,10 @@
         {
             "type": "Microsoft.Web/sites/hostNameBindings",
             "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_python_django_demo_name'), '/', parameters('sites_python_django_demo_name'), '.azurewebsites.net')]",
+            "name": "[concat(parameters('web_app_name'), '/', parameters('web_app_name'), '.azurewebsites.net')]",
             "location": "East US 2",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_python_django_demo_name'))]"
+                "[resourceId('Microsoft.Web/sites', parameters('web_app_name'))]"
             ],
             "properties": {
                 "siteName": "python-django-demo",
