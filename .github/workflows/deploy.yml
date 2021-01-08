@@ -4,12 +4,6 @@
 name: Build and deploy Django app to Azure App Service
 
 on:
-  push:
-    paths:
-      - '**.py'
-      - '**.html'
-    branches: 
-      - master
   workflow_dispatch:
     inputs:
       logLevel:
@@ -57,7 +51,7 @@ jobs:
       uses: Azure/appservice-settings@v1
       with:  
         app-name: ${{ env.WEBAPP_NAME }}
-        app-settings-json: '[{ "name": "DBHOST", "value": "${{ secrets.DBHOST }}"}, { "name": "DBNAME", "value": "${{ secrets.DBNAME }}"}, { "name": "DBUSER", "value": "${{ secrets.DBUSER }}"}, { "name": "DBPASS", "value": "${{ secrets.DBPASS }}"}, { "name": "DISABLE_COLLECTSTATIC", "value": "true" }, { "name": "POST_BUILD_COMMAND",  "value": "python manage.py makemigrations && python manage.py migrate" }, { "name": "SCM_DO_BUILD_DURING_DEPLOYMENT", "value": "true" }]'
+        app-settings-json: '[{ "name": "AZURE_STORAGE_ACCOUNT_NAME", "value": "${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }}" }, { "name": "AZURE_STORAGE_ACCOUNT_KEY", "value": "${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}" }, { "name": "DBHOST", "value": "${{ secrets.DBHOST }}"}, { "name": "DBNAME", "value": "${{ secrets.DBNAME }}"}, { "name": "DBUSER", "value": "${{ secrets.DBUSER }}"}, { "name": "DBPASS", "value": "${{ secrets.DBPASS }}"}, { "name": "DISABLE_COLLECTSTATIC", "value": "true" }, { "name": "POST_BUILD_COMMAND",  "value": "python manage.py makemigrations && python manage.py migrate" }, { "name": "SCM_DO_BUILD_DURING_DEPLOYMENT", "value": "true" }]'
 
     - name: Deploy to App Service
       uses: azure/webapps-deploy@v2
