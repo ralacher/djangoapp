@@ -18,10 +18,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',                    
 ]
 
-INSTALLED_APPS = [
-    'storages',
-]
-
 DEFAULT_FILE_STORAGE = 'azuresite.azure_storage.MediaFileStorage'
 STATICFILES_STORAGE = 'azuresite.azure_storage.StaticFileStorage'
 STATIC_LOCATION = 'static'
