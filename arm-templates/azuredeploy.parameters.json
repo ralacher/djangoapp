@@ -2,13 +2,13 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "sites_python_django_demo_name": {
+        "web_app_name": {
             "value": "python-django-demo"
         },
-        "vaults_python_django_demo_name": {
+        "key_vault_name": {
             "value": "python-django-demo"
         },
-        "serverfarms_python_django_demo_name": {
+        "web_plan_name": {
             "value": "python-django-demo"
         }
     }
